@@ -6,8 +6,8 @@ pygame.init()
 WIDTH = 800
 HEIGHT = 600
 GRID_SIZE = 20
-GRID_WIDTH = WIDTH
-GRID_HEIGHT = HEIGHT
+GRID_WIDTH = WIDTH // GRID_SIZE
+GRID_HEIGHT = HEIGHT // GRID_SIZE
 FPS = 10
 
 BLACK = (0, 0, 0)
@@ -56,12 +56,12 @@ class Snake:
         Params:
             new_direction: str
         """
-        if new_direction in ("UP", "DOWN", "RIGHT", "LEFT"):
+        if new_direction.upper() in ("UP", "DOWN", "RIGHT", "LEFT"):
             if (new_direction == "UP" and self.direction != "DOWN") or \
                 (new_direction == "DOWN" and self.direction != "UP")or \
                 (new_direction == "LEFT" and self.direction != "RIGHT") or\
                 (new_direction == "RIGHT" and self.direction != "LEFT"):
-                self.direction = new_direction
+                self.direction = new_direction.upper()
 
     def eat_food(self):
         """
@@ -107,7 +107,7 @@ class Food:
             int, int
         """
         x = random.randint(0, GRID_WIDTH - 1) * GRID_SIZE
-        y = random.randint(0, GRID_SIZE - 1) * GRID_SIZE
+        y = random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE  # Corrected here
         return x, y
 
     def draw(self):
@@ -129,44 +129,44 @@ clock = pygame.time.Clock()
 game_over = False
 
 while running:
-  for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-      running = False
-    elif event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_UP:
-        snake.change_direction("up")
-      elif event.key == pygame.K_DOWN:
-        snake.change_direction("DOWN")
-      elif event.key == pygame.K_LEFT:
-        snake.change_direction("LEFT")
-      elif event.key == pygame.K_RIGHT:
-        snake.change_direction("RIGHT")
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                snake.change_direction("UP")
+            elif event.key == pygame.K_DOWN:
+                snake.change_direction("DOWN")
+            elif event.key == pygame.K_LEFT:
+                snake.change_direction("LEFT")
+            elif event.key == pygame.K_RIGHT:
+                snake.change_direction("RIGHT")
 
     if not game_over:
         snake.move()
 
     if snake.body[0] == food.position:
-      snake.eat_food()
-      food.position = food.generate_position()
-      score += 1
+        snake.eat_food()
+        food.position = food.generate_position()
+        score += 1
 
     if snake.check_collision():
-      game_over = True
+        game_over = True
 
-  window.fill(BLACK)
+    window.fill(BLACK)
 
-  snake.draw()
-  food.draw()
+    snake.draw()
+    food.draw()
 
-  score_text = font.render(f"Score :{score}", True, WHITE)
-  window.blit(score_text, (10, 10))
+    score_text = font.render(f"Score :{score}", True, WHITE)
+    window.blit(score_text, (10, 10))
 
-  if game_over:
-    game_over_text = font.render("Game Over", True, WHITE)
-    game_over_rect = game_over_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-    window.blit(game_over_text, game_over_rect)
+    if game_over:
+        game_over_text = font.render("Game Over", True, WHITE)
+        game_over_rect = game_over_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        window.blit(game_over_text, game_over_rect)
 
-  pygame.display.update()
-  clock.tick(FPS)
+    pygame.display.update()
+    clock.tick(FPS)
 
 pygame.quit()
