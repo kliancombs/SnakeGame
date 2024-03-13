@@ -25,7 +25,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## UNDER CONSTRUCTION
-
 ## License
 [MIT](https://raw.githubusercontent.com/kliancombs/SnakeGame/main/LICENSE)
